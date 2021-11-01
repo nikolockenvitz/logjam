@@ -1,0 +1,10 @@
+[ssh]
+username = firstname.lastname
+password = super secret passphrase definitely not yet leaked
+
+#host = 192.168.42.108
+host = your-ssh-domain.tld
+
+# if you want to prevent connecting via ssh, you can set this to True
+# other values or if you don't specify this at all, it will be ignored
+disabled = True

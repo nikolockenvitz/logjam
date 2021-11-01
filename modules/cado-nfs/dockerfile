@@ -1,0 +1,20 @@
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update -y -qq &&\
+    apt-get upgrade -y -qq &&\
+    apt-get install git build-essential libgmp-dev gmp-ecm libomp-dev libopenmpi-dev hwloc cmake python3 curl -y -qq
+
+WORKDIR /opt
+RUN git clone https://gitlab.inria.fr/cado-nfs/cado-nfs.git
+COPY local.sh ./cado-nfs/
+RUN cd cado-nfs &&\
+    make &&\
+    make install
+
+ENV PATH="/usr/local/cado/bin/:${PATH}"
+ENV OMPI_ALLOW_RUN_AS_ROOT=1
+ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+COPY master.py master.py
+
+
+WORKDIR /home

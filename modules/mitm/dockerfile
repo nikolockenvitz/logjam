@@ -1,0 +1,15 @@
+FROM ubuntu:14.04
+RUN apt-get update -qq 
+RUN apt-get upgrade -qq -y
+RUN apt-get install python3 -qq -y
+RUN apt-get install python3-pip -qq -y
+RUN apt-get install openssl -qq -y
+RUN apt-get install curl -qq -y
+RUN apt-get install iptables -qq -y
+
+RUN apt-get install build-essential python3-dev libnetfilter-queue-dev -qq -y
+RUN pip3 install NetfilterQueue scapy
+RUN pip3 install pycryptodomex
+RUN pip3 install ptvsd
+
+WORKDIR /code

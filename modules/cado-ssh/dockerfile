@@ -1,0 +1,9 @@
+FROM ubuntu:20.04
+RUN apt-get update -y -qq &&\
+    apt-get upgrade -y -qq &&\
+    apt-get install python3 python3-pip -y -qq
+
+RUN pip3 install paramiko
+
+WORKDIR /code
+COPY ./init.py ./.ssh_config* ./

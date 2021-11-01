@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      button,
+      span {
+        font-size: 3em;
+      }
+      button {
+        width: 3em;
+        margin: 1em;
+      }
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p>Hello, World!</p>
+
+    <button onclick="inc(-1)">-</button>
+    <span id="cnt">0</span>
+    <button onclick="inc(1)">+</button>
+
+    <script>
+      function inc(n) {
+        const cnt = document.getElementById("cnt");
+        const value = Number(cnt.textContent) || 0;
+        cnt.textContent = value + n;
+      }
+    </script>
+  </body>
+</html>

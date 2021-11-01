@@ -1,0 +1,32 @@
+FROM ubuntu:14.04
+RUN apt-get update -qq 
+RUN apt-get upgrade -qq -y 
+RUN apt-get install python3 -qq -y
+#RUN apt-get install openssl -y -qq
+RUN apt-get install traceroute -y -qq
+RUN apt-get install curl -y -qq
+RUN apt-get install wget -y -qq
+RUN apt-get install build-essential -y -qq
+
+WORKDIR /opt
+RUN wget https://www.openssl.org/source/old/1.0.1/openssl-1.0.1f.tar.gz &&\
+    tar -xzf openssl-1.0.1f.tar.gz
+WORKDIR /opt/openssl-1.0.1f
+RUN ./config -DOPENSSL_TLS_SECURITY_LEVEL=0 --prefix=/usr &&\
+    make &&\
+    make install_sw
+
+RUN echo 'alias curl-http="curl http://server"' >> ~/.bashrc
+RUN echo 'alias curl-https="curl https://server --insecure"' >> ~/.bashrc
+RUN echo 'alias curl-exp-https="curl https://server --insecure --ciphers EXPORT"' >> ~/.bashrc
+RUN echo 'alias openssl-connect="openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-main="printf \"GET /\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-http-main="printf \"GET / HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: server\r\nAccept: */*\r\n\r\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-page1="printf \"GET /page1.html\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-http-page1="printf \"GET /page1.html HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: server\r\nAccept: */*\r\n\r\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-counter="printf \"GET /counter.html\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-http-counter="printf \"GET /counter.html HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: server\r\nAccept: */*\r\n\r\n\" | openssl s_client -quiet -connect server:443"' >> ~/.bashrc
+RUN echo 'alias openssl-connect-npn="printf \"GET / HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: server\r\nAccept: */*\r\n\r\n\" | openssl s_client -quiet -connect server:443 -nextprotoneg \"http/1.1\""' >> ~/.bashrc
+
+WORKDIR /code
+COPY ./init.py .

@@ -1,0 +1,22 @@
+FROM ubuntu:14.04
+EXPOSE 443
+RUN apt-get update -qq 
+RUN apt-get upgrade -qq -y
+RUN apt-get install openssl -y -qq
+RUN apt-get install traceroute -y -qq
+RUN apt-get install nginx -y -qq
+RUN mkdir /etc/nginx/ssl
+
+RUN apt-get install python3 -qq -y
+RUN apt-get install python3-pip -qq -y
+COPY ./login-demo/requirements.txt /login-demo/requirements.txt
+RUN pip3 install -r /login-demo/requirements.txt
+COPY ./login-demo/ /login-demo/
+
+COPY ./dhparams/* /etc/nginx/ssl/
+COPY ./cert/* /etc/nginx/ssl/
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./*.html /usr/share/nginx/html/
+
+WORKDIR /code
+COPY ./init.py .
